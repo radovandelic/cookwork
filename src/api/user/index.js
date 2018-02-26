@@ -1,13 +1,16 @@
-import { Router } from 'express'
-import { middleware as query } from 'querymen'
-import { middleware as body } from 'bodymen'
-import { password as passwordAuth, master, token } from '../../services/passport'
-import { index, showMe, show, create, update, updatePassword, destroy } from './controller'
-import { schema } from './model'
-export User, { schema } from './model'
+import { Router } from 'express';
+import { middleware as query } from 'querymen';
+import { middleware as body } from 'bodymen';
+import { password as passwordAuth, master, token } from '../../services/passport';
+import { index, showMe, show, register, create, update, updatePassword, destroy } from './controller';
+import { masterKey } from '../../config';
+import User, { schema } from './model';
+export { User, schema }
 
 const router = new Router()
-const { email, password, name, picture, role } = schema.tree
+const { email, password, name, picture, role, firstName, lastName, verifyToken } = schema.tree
+
+
 
 /**
  * @api {get} /users Retrieve users
@@ -21,9 +24,9 @@ const { email, password, name, picture, role } = schema.tree
  * @apiError 401 Admin access only.
  */
 router.get('/',
-  token({ required: true, roles: ['admin'] }),
-  query(),
-  index)
+    token({ required: true, roles: ['admin'] }),
+    query(),
+    index)
 
 /**
  * @api {get} /users/me Retrieve current user
@@ -34,8 +37,22 @@ router.get('/',
  * @apiSuccess {Object} user User's data.
  */
 router.get('/me',
-  token({ required: true }),
-  showMe)
+    token({ required: true }),
+    showMe)
+
+/**
+* @api {get} /users/:id Verify user account
+* @apiName VerifyUser
+* @apiGroup User
+* @apiPermission public
+* @apiSuccess {Object} user User's data.
+* @apiError 404 User or verification token not found.
+*/
+router.get('/verify/:id/:token', (req, res) => {
+    let id = req.params.id;
+    let token = req.params.token;
+    //res.json({ id, token })
+})
 
 /**
  * @api {get} /users/:id Retrieve user
@@ -46,7 +63,25 @@ router.get('/me',
  * @apiError 404 User not found.
  */
 router.get('/:id',
-  show)
+    show)
+
+/**
+ * @api {post} /users/register Register new user
+ * @apiName RegisterUser
+ * @apiGroup User
+ * @apiPermission public
+ * @apiParam {String} email User's email.
+ * @apiParam {String{6..}} password User's password.
+ * @apiParam {String} [name] User's name.
+ * @apiParam {String} [picture] User's picture.
+ * @apiSuccess (Sucess 201) {Object} user User's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 Master access only.
+ * @apiError 409 Email already registered.
+ */
+router.post('/register',
+    body({ email, password, name, firstName, lastName, picture, role: 'user', access_token: masterKey }),
+    register)
 
 /**
  * @api {post} /users Create user
@@ -65,9 +100,9 @@ router.get('/:id',
  * @apiError 409 Email already registered.
  */
 router.post('/',
-  master(),
-  body({ email, password, name, picture, role }),
-  create)
+    master(),
+    body({ email, password, name, firstName, lastName, picture, role, verifyToken }),
+    create)
 
 /**
  * @api {put} /users/:id Update user
@@ -83,9 +118,9 @@ router.post('/',
  * @apiError 404 User not found.
  */
 router.put('/:id',
-  token({ required: true }),
-  body({ name, picture }),
-  update)
+    token({ required: true }),
+    body({ name, firstName, lastName, picture }),
+    update)
 
 /**
  * @api {put} /users/:id/password Update password
@@ -99,9 +134,9 @@ router.put('/:id',
  * @apiError 404 User not found.
  */
 router.put('/:id/password',
-  passwordAuth(),
-  body({ password }),
-  updatePassword)
+    passwordAuth(),
+    body({ password }),
+    updatePassword)
 
 /**
  * @api {delete} /users/:id Delete user
@@ -114,7 +149,7 @@ router.put('/:id/password',
  * @apiError 404 User not found.
  */
 router.delete('/:id',
-  token({ required: true, roles: ['admin'] }),
-  destroy)
+    token({ required: true, roles: ['admin'] }),
+    destroy)
 
 export default router

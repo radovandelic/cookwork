@@ -3,9 +3,17 @@ import { env, mongo, port, ip, apiRoot } from './config'
 import mongoose from './services/mongoose'
 import express from './services/express'
 import api from './api'
+import path from 'path'
 
 const app = express(apiRoot, api)
+
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+});
+
 const server = http.createServer(app)
+
 
 mongoose.connect(mongo.uri, { useMongoClient: true })
 mongoose.Promise = Promise

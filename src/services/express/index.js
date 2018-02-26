@@ -22,6 +22,7 @@ export default (apiRoot, routes) => {
   app.use(apiRoot, routes)
   app.use(queryErrorHandler())
   app.use(bodyErrorHandler())
+  app.use(express.static('build'))
 
   return app
 }

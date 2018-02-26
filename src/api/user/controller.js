@@ -1,6 +1,10 @@
 import { success, notFound } from '../../services/response/'
 import { User } from '.'
 import { sign } from '../../services/jwt'
+import Request from 'request-promise'
+import { ip, port } from '../../config'
+import { sendVerificationMail } from '../../services/mailgun'
+import randtoken from 'rand-token'
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   User.count(query)
@@ -23,11 +27,31 @@ export const show = ({ params }, res, next) =>
 export const showMe = ({ user }, res) =>
   res.json(user.view(true))
 
+export const register = ({ bodymen: { body } }, res, next) => {
+  body.verifyToken = randtoken.generate(48);
+  Request({ method: 'POST', url: `http://${ip}:${port}/api/users`, json: body })
+    .then(body => body)
+    .then(success(res, 201))
+    .catch((err) => {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        console.log(err);
+        res.status(409).json({
+          valid: false,
+          param: 'email',
+          message: 'email already registered'
+        })
+      } else {
+        next(err)
+      }
+    })
+}
+
 export const create = ({ bodymen: { body } }, res, next) =>
   User.create(body)
     .then(user => {
       sign(user.id)
         .then((token) => ({ token, user: user.view(true) }))
+        .then(sendVerificationMail(user.email, user.id, body.verifyToken))
         .then(success(res, 201))
     })
     .catch((err) => {
