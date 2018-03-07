@@ -2,12 +2,18 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { uploadImg } from '../../services/cloudinary'
+import { create, index, show, update, destroy, updateImage } from './controller'
 import Kitchen, { schema } from './model'
+import bodyParser from 'body-parser'
 export { Kitchen, schema }
 
+
+
 const router = new Router()
-const { name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity } = schema.tree
+const { name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent,
+  equipment, staff, cancellation, events, standingCapacity, sittingCapacity } = schema.tree
+const image = { type: String }
 
 /**
  * @api {post} /kitchens Create kitchen
@@ -43,6 +49,7 @@ router.post('/',
   body({ name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity }),
   create)
 
+
 /**
  * @api {get} /kitchens Retrieve kitchens
  * @apiName RetrieveKitchens
@@ -56,6 +63,7 @@ router.get('/',
   query(),
   index)
 
+
 /**
  * @api {get} /kitchens/:id Retrieve kitchen
  * @apiName RetrieveKitchen
@@ -66,6 +74,24 @@ router.get('/',
  */
 router.get('/:id',
   show)
+
+
+/**
+ * @api {post} /kitchens/:id/images/upload Upload kitchen image(s)
+ * @apiName UploadImage
+ * @apiGroup Kitchen
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
+ * @apiParam image Image to be added.
+ * @apiSuccess {Object} kitchen Kitchen's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Kitchen not found.
+ */
+router.put('/:id/images/upload',
+  token({ required: true }),
+  body({ image }),
+  updateImage)
+
 
 /**
  * @api {put} /kitchens/:id Update kitchen
@@ -98,8 +124,12 @@ router.get('/:id',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity }),
+  body({
+    name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent,
+    equipment, staff, cancellation, events, standingCapacity, sittingCapacity
+  }),
   update)
+
 
 /**
  * @api {delete} /kitchens/:id Delete kitchen

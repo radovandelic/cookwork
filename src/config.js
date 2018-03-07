@@ -25,7 +25,7 @@ const config = {
     port: process.env.PORT || 9000,
     ip: process.env.IP || '0.0.0.0',
     apiRoot: process.env.API_ROOT || '/api',
-    defaultEmail: 'no-reply@cookwork',
+    defaultEmail: 'no-reply@cookwork.ml',
     sendgridKey: requireProcessEnv('SENDGRID_KEY'),
     masterKey: requireProcessEnv('MASTER_KEY'),
     jwtSecret: requireProcessEnv('JWT_SECRET'),
@@ -37,6 +37,11 @@ const config = {
         user: requireProcessEnv('MAILGUN_USER'),
         pass: requireProcessEnv('MAILGUN_PASS')
       }
+    },
+    cloudinaryConfig: {
+      cloud_name: requireProcessEnv('CLOUD_NAME'),
+      api_key: requireProcessEnv('CLOUD_KEY'),
+      api_secret: requireProcessEnv('CLOUD_SECRET')
     },
     mongo: {
       options: {

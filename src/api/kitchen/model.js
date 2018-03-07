@@ -7,28 +7,34 @@ const kitchenSchema = new Schema({
     required: true
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   phone: {
-    type: String
+    type: String,
+    required: true
   },
   description: {
     type: String
   },
   type: {
-    type: String
+    type: String,
+    required: true
   },
   address: {
-    type: String
+    type: String,
+    required: true
   },
   size: {
-    type: Number
+    type: Number,
+    required: true
   },
   AFSCA: {
     type: Number
   },
   VAT: {
-    type: Number
+    type: Number,
+    required: true
   },
   hours: {
     type: Object
@@ -37,7 +43,8 @@ const kitchenSchema = new Schema({
     type: Number
   },
   price: {
-    type: Number
+    type: Number,
+    required: true
   },
   rent: {
     type: Number
@@ -59,7 +66,11 @@ const kitchenSchema = new Schema({
   },
   sittingCapacity: {
     type: Number
-  }
+  },
+  images: [{
+    large: String,
+    thumbnail: String
+  }]
 }, {
     timestamps: true,
     toJSON: {
@@ -93,7 +104,8 @@ kitchenSchema.methods = {
       standingCapacity: this.standingCapacity,
       sittingCapacity: this.sittingCapacity,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      images: this.images
     }
 
     return full ? {

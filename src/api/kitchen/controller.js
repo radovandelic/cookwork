@@ -1,8 +1,8 @@
 import { success, notFound, authorOrAdmin } from '../../services/response/'
+import { uploadImg } from '../../services/cloudinary'
 import { Kitchen } from '.'
 
 export const create = ({ user, bodymen: { body } }, res, next) => {
-  console.log(body, user)
   Kitchen.create({ ...body, user })
     .then((kitchen) => kitchen.view(true))
     .then(success(res, 201))
@@ -37,6 +37,29 @@ export const update = ({ user, bodymen: { body }, params }, res, next) =>
     .then((kitchen) => kitchen ? kitchen.view(true) : null)
     .then(success(res))
     .catch(next)
+
+
+export const updateImage = ({ user, bodymen: { body }, params }, res, next) => {
+  Kitchen.findById(params.id)
+    .populate('user')
+    .then(notFound(res))
+    .then(authorOrAdmin(res, user, 'user'))
+    .then((kitchen) =>
+      uploadImg(body.image)
+        .then((result) => {
+          let { large, thumbnail } = result;
+          if (kitchen) {
+            kitchen.images = kitchen.images ? kitchen.images : [];
+            kitchen.images.push({ large, thumbnail });
+          }
+          return kitchen.save();
+        })
+        .catch(err => err)
+    )
+    .then((kitchen) => kitchen ? kitchen.view(true) : null)
+    .then(success(res))
+    .catch(next)
+}
 
 export const destroy = ({ user, params }, res, next) =>
   Kitchen.findById(params.id)
