@@ -3,7 +3,7 @@ import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
 import { uploadImg } from '../../services/cloudinary'
-import { create, index, show, update, destroy, updateImage } from './controller'
+import { create, index, show, update, destroy, updateImage, findByUser } from './controller'
 import Kitchen, { schema } from './model'
 import bodyParser from 'body-parser'
 export { Kitchen, schema }
@@ -77,23 +77,6 @@ router.get('/:id',
 
 
 /**
- * @api {post} /kitchens/:id/images/upload Upload kitchen image(s)
- * @apiName UploadImage
- * @apiGroup Kitchen
- * @apiPermission user
- * @apiParam {String} access_token user access token.
- * @apiParam image Image to be added.
- * @apiSuccess {Object} kitchen Kitchen's data.
- * @apiError {Object} 400 Some parameters may contain invalid values.
- * @apiError 404 Kitchen not found.
- */
-router.put('/:id/images/upload',
-  token({ required: true }),
-  body({ image }),
-  updateImage)
-
-
-/**
  * @api {put} /kitchens/:id Update kitchen
  * @apiName UpdateKitchen
  * @apiGroup Kitchen
@@ -144,5 +127,39 @@ router.put('/:id',
 router.delete('/:id',
   token({ required: true }),
   destroy)
+
+
+/**
+ * @api {post} /kitchens/:id/images/upload Upload kitchen image(s)
+ * @apiName UploadImage
+ * @apiGroup Kitchen
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
+ * @apiParam image Image to be added.
+ * @apiSuccess {Object} kitchen Kitchen's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Kitchen not found.
+ */
+router.put('/:id/images/upload',
+  token({ required: true }),
+  body({ image }),
+  updateImage)
+
+
+/**
+ * @api {post} /kitchens/:id/images/upload Upload kitchen image(s)
+ * @apiName UploadImage
+ * @apiGroup Kitchen
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
+ * @apiParam image Image to be added.
+ * @apiSuccess {Object} kitchen Kitchen's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Kitchen not found.
+ */
+router.get('/user/:userid/',
+  token({ required: true }),
+  findByUser)
+
 
 export default router

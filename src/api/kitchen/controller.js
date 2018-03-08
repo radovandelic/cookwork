@@ -8,6 +8,7 @@ export const create = ({ user, bodymen: { body } }, res, next) => {
     .then(success(res, 201))
     .catch(next)
 }
+
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   Kitchen.count(query)
     .then(count => Kitchen.find(query, select, cursor)
@@ -38,8 +39,7 @@ export const update = ({ user, bodymen: { body }, params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-
-export const updateImage = ({ user, bodymen: { body }, params }, res, next) => {
+export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
   Kitchen.findById(params.id)
     .populate('user')
     .then(notFound(res))
@@ -59,7 +59,14 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) => {
     .then((kitchen) => kitchen ? kitchen.view(true) : null)
     .then(success(res))
     .catch(next)
-}
+
+export const findByUser = ({ params }, res, next) =>
+  Kitchen.find({ user: { _id: params.userid } })
+    .populate('user')
+    .then(notFound(res))
+    .then((kitchen) => kitchen ? kitchen[0].view() : null)
+    .then(success(res))
+    .catch(next)
 
 export const destroy = ({ user, params }, res, next) =>
   Kitchen.findById(params.id)

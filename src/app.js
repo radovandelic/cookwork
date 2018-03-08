@@ -8,9 +8,9 @@ import path from 'path'
 const app = express(apiRoot, api)
 
 
-app.get('*', (req, res) => {
+/* app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
-});
+}); */
 
 const server = http.createServer(app)
 
