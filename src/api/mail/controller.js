@@ -1,0 +1,1 @@
+import { sendEnquiryMail } from '../../services/mailgun';

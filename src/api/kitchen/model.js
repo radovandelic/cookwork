@@ -30,10 +30,10 @@ const kitchenSchema = new Schema({
     required: true
   },
   AFSCA: {
-    type: Number
+    type: String
   },
   VAT: {
-    type: Number,
+    type: String,
     required: true
   },
   hours: {

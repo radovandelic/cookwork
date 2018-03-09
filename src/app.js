@@ -3,7 +3,6 @@ import { env, mongo, port, ip, apiRoot } from './config'
 import mongoose from './services/mongoose'
 import express from './services/express'
 import api from './api'
-import path from 'path'
 
 const app = express(apiRoot, api)
 

@@ -25,10 +25,11 @@ const config = {
     port: process.env.PORT || 9000,
     ip: process.env.IP || '0.0.0.0',
     apiRoot: process.env.API_ROOT || '/api',
-    defaultEmail: 'no-reply@cookwork.ml',
+    defaultEmail: 'noreply@cookwork.eu',
     sendgridKey: requireProcessEnv('SENDGRID_KEY'),
     masterKey: requireProcessEnv('MASTER_KEY'),
     jwtSecret: requireProcessEnv('JWT_SECRET'),
+    supportEmail: requireProcessEnv('SUPPORT_EMAIL'),
     transportOptions: {
       host: process.env.SMTP || 'smtp.mailgun.org',
       port: 465,
