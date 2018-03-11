@@ -10,7 +10,7 @@ export { Kitchen, schema }
 
 
 const router = new Router()
-const { name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent,
+const { name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price, rent,
   equipment, staff, cancellation, events, standingCapacity, sittingCapacity } = schema.tree
 const image = { type: String }
 
@@ -45,7 +45,10 @@ const image = { type: String }
  */
 router.post('/',
   token({ required: true }),
-  body({ name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity }),
+  body({
+    name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price,
+    rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity
+  }),
   create)
 
 
@@ -107,8 +110,8 @@ router.get('/:id',
 router.put('/:id',
   token({ required: true }),
   body({
-    name, phone, description, type, address, size, AFSCA, VAT, hours, capacity, price, rent,
-    equipment, staff, cancellation, events, standingCapacity, sittingCapacity
+    name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price,
+    rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity
   }),
   update)
 

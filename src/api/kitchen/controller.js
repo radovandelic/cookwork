@@ -3,6 +3,7 @@ import { uploadImg } from '../../services/cloudinary'
 import { Kitchen } from '.'
 
 export const create = ({ user, bodymen: { body } }, res, next) => {
+  body.verified = false;
   Kitchen.create({ ...body, user })
     .then((kitchen) => kitchen.view(true))
     .then(success(res, 201))

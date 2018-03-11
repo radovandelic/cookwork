@@ -29,6 +29,7 @@ export const showMe = ({ user }, res) =>
 
 export const register = ({ bodymen: { body } }, res, next) => {
   body.verifyToken = randtoken.generate(48);
+  body.verified = false;
   Request({ method: 'POST', url: `http://${ip}:${port}/api/users`, json: body })
     .then(body => body)
     .then(success(res, 201))

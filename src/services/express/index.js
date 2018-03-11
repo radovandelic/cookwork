@@ -15,14 +15,15 @@ export default (apiRoot, routes) => {
     app.use(cors())
     app.use(compression())
     app.use(morgan('dev'))
+    app.use(morgan(' - :date[clf] - :remote-addr'))
   }
 
   app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(bodyParser.json({ limit: '50mb' }))
+  app.use(bodyParser.json({ limit: '5mb' }))
   app.use(apiRoot, routes)
   app.use(queryErrorHandler())
   app.use(bodyErrorHandler())
-  app.use(express.static('build'))
+  //app.use(express.static('build'))
 
   return app
 }

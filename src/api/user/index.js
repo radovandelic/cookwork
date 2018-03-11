@@ -8,7 +8,7 @@ import User, { schema } from './model';
 export { User, schema }
 
 const router = new Router()
-const { email, password, name, picture, role, firstName, lastName, verifyToken } = schema.tree
+const { email, password, name, picture, role, firstName, lastName, verifyToken, verified } = schema.tree
 
 
 
@@ -80,7 +80,10 @@ router.get('/:id',
  * @apiError 409 Email already registered.
  */
 router.post('/register',
-    body({ email, password, name, firstName, lastName, picture, role: 'user', access_token: masterKey }),
+    body({
+        email, password, name, firstName, lastName, picture, role: 'user', access_token: masterKey,
+        verified: false
+    }),
     register)
 
 /**
@@ -101,7 +104,7 @@ router.post('/register',
  */
 router.post('/',
     master(),
-    body({ email, password, name, firstName, lastName, picture, role, verifyToken }),
+    body({ email, password, name, firstName, lastName, picture, role, verifyToken, verified }),
     create)
 
 /**

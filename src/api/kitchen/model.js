@@ -25,6 +25,12 @@ const kitchenSchema = new Schema({
     type: String,
     required: true
   },
+  postalCode: {
+    type: Number
+  },
+  region: {
+    type: String
+  },
   size: {
     type: Number,
     required: true
@@ -70,7 +76,10 @@ const kitchenSchema = new Schema({
   images: [{
     large: String,
     thumbnail: String
-  }]
+  }],
+  verified: {
+    type: Boolean
+  }
 }, {
     timestamps: true,
     toJSON: {
@@ -80,23 +89,27 @@ const kitchenSchema = new Schema({
   })
 
 kitchenSchema.methods = {
-  view(full) {
+  view(full, admin) {
     const view = {
       // simple view
       id: this.id,
       user: this.user.view(full),
       name: this.name,
-      phone: this.phone,
-      description: this.description,
       type: this.type,
       address: this.address,
+      postalCode: this.postalCode,
+      region: this.region,
       size: this.size,
-      AFSCA: this.AFSCA,
-      VAT: this.VAT,
-      hours: this.hours,
-      capacity: this.capacity,
       price: this.price,
       rent: this.rent,
+      images: [this.images[0]]
+    }
+
+    const fullView = {
+      ...view,
+      description: this.description,
+      hours: this.hours,
+      capacity: this.capacity,
       equipment: this.equipment,
       staff: this.staff,
       cancellation: this.cancellation,
@@ -104,14 +117,17 @@ kitchenSchema.methods = {
       standingCapacity: this.standingCapacity,
       sittingCapacity: this.sittingCapacity,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      images: this.images
+      updatedAt: this.updatedAt
     }
 
-    return full ? {
-      ...view
-      // add properties for a full view
-    } : view
+    return full ?
+      admin ? {
+        ...fullView,
+        phone: this.phone,
+        AFSCA: this.AFSCA,
+        VAT: this.VAT,
+        verified: this.verified
+      } : fullView : view
   }
 }
 
