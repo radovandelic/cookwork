@@ -102,7 +102,7 @@ kitchenSchema.methods = {
       size: this.size,
       price: this.price,
       rent: this.rent,
-      images: this.images[0] ? [this.images[0]] : []
+      images: this.images
     }
 
     const fullView = {
