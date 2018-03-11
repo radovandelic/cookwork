@@ -65,7 +65,7 @@ export const findByUser = ({ params }, res, next) =>
   Kitchen.find({ user: { _id: params.userid } })
     .populate('user')
     .then(notFound(res))
-    .then((kitchen) => kitchen ? kitchen[0].view() : null)
+    .then((kitchen) => kitchen ? kitchen[0].view(true, true) : null)
     .then(success(res))
     .catch(next)
 
