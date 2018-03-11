@@ -26,7 +26,7 @@ export const show = ({ params }, res, next) =>
   Kitchen.findById(params.id)
     .populate('user')
     .then(notFound(res))
-    .then((kitchen) => kitchen ? kitchen.view() : null)
+    .then((kitchen) => kitchen ? kitchen.view(true, true) : null)
     .then(success(res))
     .catch(next)
 
