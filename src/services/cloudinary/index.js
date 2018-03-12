@@ -6,8 +6,8 @@ cloudinary.config(cloudinaryConfig)
 const options = [
     {
         quality: 90,
-        width: 1000,
-        height: 1000,
+        width: 480,
+        height: 360,
         crop: 'limit'
     },
     {
