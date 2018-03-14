@@ -50,7 +50,8 @@ const userSchema = new Schema({
     type: String
   },
   verified: {
-    type: Boolean
+    type: Boolean,
+    defaule: false
   }
 }, {
     timestamps: true

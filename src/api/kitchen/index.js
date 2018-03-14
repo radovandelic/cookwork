@@ -11,7 +11,7 @@ export { Kitchen, schema }
 
 const router = new Router()
 const { name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price, rent,
-  equipment, staff, cancellation, events, standingCapacity, sittingCapacity } = schema.tree
+  equipment, staff, cancellation, events, standingCapacity, sittingCapacity, verified } = schema.tree
 const image = { type: String }
 
 /**
@@ -62,7 +62,10 @@ router.post('/',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  */
 router.get('/',
-  query(),
+  query({
+    verified: { type: Boolean, paths: ['verified'] },
+    region: { type: String, paths: ['region'] }
+  }),
   index)
 
 
@@ -75,6 +78,7 @@ router.get('/',
  * @apiError 404 Kitchen not found.
  */
 router.get('/:id',
+  token({ required: false }),
   show)
 
 
@@ -111,7 +115,7 @@ router.put('/:id',
   token({ required: true }),
   body({
     name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price,
-    rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity
+    rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity, verified
   }),
   update)
 
@@ -149,12 +153,11 @@ router.put('/:id/images/upload',
 
 
 /**
- * @api {post} /kitchens/:id/images/upload Upload kitchen image(s)
- * @apiName UploadImage
+ * @api {post} /kitchens/user/:userid Find kitcher by user id
+ * @apiName FindByUser
  * @apiGroup Kitchen
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam image Image to be added.
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Kitchen not found.

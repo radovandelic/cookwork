@@ -8,11 +8,13 @@ const kitchenSchema = new Schema({
   },
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   phone: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   description: {
     type: String
@@ -23,7 +25,8 @@ const kitchenSchema = new Schema({
   },
   address: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   postalCode: {
     type: Number
@@ -36,11 +39,13 @@ const kitchenSchema = new Schema({
     required: true
   },
   AFSCA: {
-    type: String
+    type: String,
+    trim: true
   },
   VAT: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   hours: {
     type: Object
@@ -89,7 +94,8 @@ const kitchenSchema = new Schema({
   })
 
 kitchenSchema.methods = {
-  view(full, admin) {
+  view(extended, role) {
+    const full = role !== 'guest'
     const view = {
       // simple view
       id: this.id,
@@ -102,10 +108,11 @@ kitchenSchema.methods = {
       size: this.size,
       price: this.price,
       rent: this.rent,
-      images: this.images
+      images: this.images,
+      verified: this.verified
     }
 
-    const fullView = {
+    const extendedView = {
       ...view,
       description: this.description,
       hours: this.hours,
@@ -120,14 +127,13 @@ kitchenSchema.methods = {
       updatedAt: this.updatedAt
     }
 
-    return full ?
-      admin ? {
-        ...fullView,
+    return extended ?
+      full ? {
+        ...extendedView,
         phone: this.phone,
         AFSCA: this.AFSCA,
-        VAT: this.VAT,
-        verified: this.verified
-      } : fullView : view
+        VAT: this.VAT
+      } : extendedView : view
   }
 }
 

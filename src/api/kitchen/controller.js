@@ -2,15 +2,13 @@ import { success, notFound, authorOrAdmin } from '../../services/response/'
 import { uploadImg } from '../../services/cloudinary'
 import { Kitchen } from '.'
 
-export const create = ({ user, bodymen: { body } }, res, next) => {
-  body.verified = false;
+export const create = ({ user, bodymen: { body } }, res, next) =>
   Kitchen.create({ ...body, user })
     .then((kitchen) => kitchen.view(true))
     .then(success(res, 201))
     .catch(next)
-}
 
-export const index = ({ querymen: { query, select, cursor } }, res, next) =>
+export const index = ({ querymen: { query, select, cursor }, params }, res, next) => {
   Kitchen.count(query)
     .then(count => Kitchen.find(query, select, cursor)
       .populate('user')
@@ -21,12 +19,18 @@ export const index = ({ querymen: { query, select, cursor } }, res, next) =>
     )
     .then(success(res))
     .catch(next)
+}
 
-export const show = ({ params }, res, next) =>
+
+export const show = ({ user, params }, res, next) =>
   Kitchen.findById(params.id)
     .populate('user')
     .then(notFound(res))
-    .then((kitchen) => kitchen ? kitchen.view(true, true) : null)
+    .then(authorOrAdmin(res, user, 'guest'))
+    .then((kitchen) => {
+
+      return kitchen ? kitchen.view(true, kitchen.role) : null
+    })
     .then(success(res))
     .catch(next)
 
@@ -35,10 +39,14 @@ export const update = ({ user, bodymen: { body }, params }, res, next) =>
     .populate('user')
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))
-    .then((kitchen) => kitchen ? Object.assign(kitchen, body).save() : null)
-    .then((kitchen) => kitchen ? kitchen.view(true) : null)
+    .then((kitchen) => {
+      for (let key in body) { if (!body[key]) delete body[key] }
+      return kitchen ? Object.assign(kitchen, body).save() : null
+    })
+    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
+
 
 export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
   Kitchen.findById(params.id)
@@ -57,7 +65,7 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
         })
         .catch(err => err)
     )
-    .then((kitchen) => kitchen ? kitchen.view(true) : null)
+    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
@@ -65,7 +73,7 @@ export const findByUser = ({ params }, res, next) =>
   Kitchen.find({ user: { _id: params.userid } })
     .populate('user')
     .then(notFound(res))
-    .then((kitchen) => kitchen ? kitchen[0].view(true, true) : null)
+    .then((kitchens) => kitchens ? kitchens[0].view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
