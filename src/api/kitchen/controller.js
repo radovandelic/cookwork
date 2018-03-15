@@ -69,11 +69,12 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const findByUser = ({ params }, res, next) =>
+export const findByUser = ({ user, params }, res, next) =>
   Kitchen.find({ user: { _id: params.userid } })
     .populate('user')
     .then(notFound(res))
-    .then((kitchens) => kitchens ? kitchens[0].view(true, kitchen.role) : null)
+    .then(authorOrAdmin(res, user, 'user'))
+    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
