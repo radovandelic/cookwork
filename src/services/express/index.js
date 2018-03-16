@@ -19,11 +19,11 @@ export default (apiRoot, routes) => {
   }
 
   app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(bodyParser.json({ limit: '5mb' }))
+  app.use(bodyParser.json({ limit: '15mb' }))
   app.use(apiRoot, routes)
   app.use(queryErrorHandler())
   app.use(bodyErrorHandler())
-  //app.use(express.static('build'))
+  // app.use(express.static('build'))
 
   return app
 }
