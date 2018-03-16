@@ -85,21 +85,23 @@ const kitchenSchema = new Schema({
   verified: {
     type: Boolean
   }
-}, {
-    timestamps: true,
-    toJSON: {
-      virtuals: true,
-      transform: (obj, ret) => { delete ret._id }
-    }
-  })
+},
+{
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (obj, ret) => { delete ret._id }
+  }
+})
 
 kitchenSchema.methods = {
-  view(extended, role) {
+  view (extended, role) {
+    console.log(role)
     const full = role !== 'guest'
     const view = {
       // simple view
       id: this.id,
-      user: this.user.view(full),
+      user: this.user.view(),
       name: this.name,
       type: this.type,
       address: this.address,
@@ -127,8 +129,8 @@ kitchenSchema.methods = {
       updatedAt: this.updatedAt
     }
 
-    return extended ?
-      full ? {
+    return extended
+      ? full ? {
         ...extendedView,
         phone: this.phone,
         AFSCA: this.AFSCA,

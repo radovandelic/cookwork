@@ -15,12 +15,12 @@ export const index = ({ querymen: { query, select, cursor }, params }, res, next
       .then((kitchens) => ({
         count,
         rows: kitchens.map((kitchen) => kitchen.view())
-      }))
+      })
+      )
     )
     .then(success(res))
     .catch(next)
 }
-
 
 export const show = ({ user, params }, res, next) =>
   Kitchen.findById(params.id)
@@ -28,8 +28,7 @@ export const show = ({ user, params }, res, next) =>
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'guest'))
     .then((kitchen) => {
-
-      return kitchen ? kitchen.view(true, kitchen.role) : null
+      return kitchen ? kitchen.view(true) : null
     })
     .then(success(res))
     .catch(next)
@@ -47,7 +46,6 @@ export const update = ({ user, bodymen: { body }, params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-
 export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
   Kitchen.findById(params.id)
     .populate('user')
@@ -56,16 +54,16 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
     .then((kitchen) =>
       uploadImg(body.image)
         .then((result) => {
-          let { large, thumbnail } = result;
+          let { large, thumbnail } = result
           if (kitchen) {
-            kitchen.images = kitchen.images ? kitchen.images : [];
-            kitchen.images.push({ large, thumbnail });
+            kitchen.images = kitchen.images ? kitchen.images : []
+            kitchen.images.push({ large, thumbnail })
           }
-          return kitchen.save();
+          return kitchen.save()
         })
         .catch(err => err)
     )
-    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
+    .then((kitchen) => kitchen ? kitchen.view(true, 'user') : null)
     .then(success(res))
     .catch(next)
 
