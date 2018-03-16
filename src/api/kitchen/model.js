@@ -96,7 +96,6 @@ const kitchenSchema = new Schema({
 
 kitchenSchema.methods = {
   view (extended, role) {
-    console.log(role)
     const full = role !== 'guest'
     const view = {
       // simple view
