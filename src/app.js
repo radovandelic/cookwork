@@ -6,13 +6,11 @@ import api from './api'
 
 const app = express(apiRoot, api)
 
-
 /* app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 }); */
 
 const server = http.createServer(app)
-
 
 mongoose.connect(mongo.uri, { useMongoClient: true })
 mongoose.Promise = Promise

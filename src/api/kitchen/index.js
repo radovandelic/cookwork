@@ -78,7 +78,8 @@ router.post('/',
 router.get('/',
   query({
     verified: { type: Boolean, paths: ['verified'] },
-    region: { type: String, paths: ['region'] }
+    region: { type: String, paths: ['region'] },
+    type: { type: String, paths: ['type'] }
   }),
   index)
 
