@@ -28,14 +28,14 @@ export const showMe = ({ user }, res) =>
   res.json(user.view(true))
 
 export const register = ({ bodymen: { body } }, res, next) => {
-  body.verifyToken = randtoken.generate(48);
-  body.verified = false;
+  body.verifyToken = randtoken.generate(48)
+  body.verified = false
   Request({ method: 'POST', url: `http://${ip}:${port}/api/users`, json: body })
     .then(body => body)
     .then(success(res, 201))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        console.log(err);
+        console.log(err)
         res.status(409).json({
           valid: false,
           param: 'email',
@@ -107,6 +107,22 @@ export const updatePassword = ({ bodymen: { body }, params, user }, res, next) =
     })
     .then((user) => user ? user.set({ password: body.password }).save() : null)
     .then((user) => user ? user.view(true) : null)
+    .then(success(res))
+    .catch(next)
+
+export const verifyAccount = ({ params }, res, next) =>
+  User.findById(params.id)
+    .then((user) => {
+      if (user && user.verifyToken === params.token) {
+        user.verified = true
+        user.save()
+        return user
+      } else {
+        return null
+      }
+    })
+    .then(notFound(res))
+    .then((user) => user ? user.view() : null)
     .then(success(res))
     .catch(next)
 
