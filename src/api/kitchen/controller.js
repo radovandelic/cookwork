@@ -67,6 +67,25 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
     .then(success(res))
     .catch(next)
 
+export const deleteImages = ({ user, bodymen: { body }, params }, res, next) =>
+  Kitchen.findById(params.id)
+    .populate('user')
+    .then(notFound(res))
+    .then(authorOrAdmin(res, user, 'user'))
+    .then((kitchen) => {
+      if (kitchen) {
+        for (const image of body.images) {
+          kitchen.images.pull({ _id: image._id })
+        }
+        return kitchen.save()
+      } else {
+        return null
+      }
+    })
+    .then((kitchen) => kitchen ? kitchen.view(true, 'user') : null)
+    .then(success(res))
+    .catch(next)
+
 export const findByUser = ({ user, params }, res, next) =>
   Kitchen.find({ user: { _id: params.userid } })
     .populate('user')

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy, updateImage, findByUser } from './controller'
+import { create, index, show, update, destroy, updateImage, deleteImages, findByUser } from './controller'
 import Kitchen, { schema } from './model'
 export { Kitchen, schema }
 
@@ -10,6 +10,7 @@ const router = new Router()
 const { name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price, rent,
   equipment, staff, cancellation, events, standingCapacity, sittingCapacity, verified } = schema.tree
 const image = { type: String }
+const images = { type: Object }
 
 /**
  * @api {post} /kitchens Create kitchen
@@ -174,12 +175,30 @@ router.delete('/:id',
  * @apiParam image Image to be added.
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 user access only.
  * @apiError 404 Kitchen not found.
  */
 router.put('/:id/images/upload',
   token({ required: true }),
   body({ image }),
   updateImage)
+
+/**
+ * @api {post} /kitchens/:id/images/delete Delete kitchen image(s)
+ * @apiName DeleteImages
+ * @apiGroup Kitchen
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
+ * @apiParam images Image(s) to be deleted.
+ * @apiSuccess {Object} kitchen Kitchen's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 user access only.
+ * @apiError 404 Kitchen not found.
+ */
+router.delete('/:id/images/delete',
+  token({ required: true }),
+  body({ images }),
+  deleteImages)
 
 /**
  * @api {post} /kitchens/user/:userid Find kitcher by user id

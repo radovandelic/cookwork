@@ -46,16 +46,24 @@ const userSchema = new Schema({
     type: String,
     trim: true
   },
+  lang: {
+    type: String,
+    default: 'fr'
+  },
   verifyToken: {
     type: String
   },
   verified: {
     type: Boolean,
-    defaule: false
+    default: false
+  },
+  kitchenOwner: {
+    type: Boolean,
+    default: false
   }
 }, {
-    timestamps: true
-  })
+  timestamps: true
+})
 
 userSchema.path('email').set(function (email) {
   if (!this.picture || this.picture.indexOf('https://gravatar.com') === 0) {
@@ -83,12 +91,12 @@ userSchema.pre('save', function (next) {
 })
 
 userSchema.methods = {
-  view(full) {
+  view (full) {
     let view = {}
     let fields = ['id', 'name', 'picture']
 
     if (full) {
-      fields = [...fields, 'email', 'createdAt', 'firstName', 'lastName']
+      fields = [...fields, 'email', 'createdAt', 'firstName', 'lastName', 'kitchenOwner', 'lang', 'verified']
     }
 
     fields.forEach((field) => { view[field] = this[field] })
@@ -96,7 +104,7 @@ userSchema.methods = {
     return view
   },
 
-  authenticate(password) {
+  authenticate (password) {
     return bcrypt.compare(password, this.password).then((valid) => valid ? this : false)
   }
 }
@@ -104,7 +112,7 @@ userSchema.methods = {
 userSchema.statics = {
   roles,
 
-  createFromService({ service, id, email, name, picture }) {
+  createFromService ({ service, id, email, name, picture }) {
     return this.findOne({ $or: [{ [`services.${service}`]: id }, { email }] }).then((user) => {
       if (user) {
         user.services[service] = id

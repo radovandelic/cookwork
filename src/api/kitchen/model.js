@@ -8,7 +8,6 @@ const kitchenSchema = new Schema({
   },
   name: {
     type: String,
-    required: true,
     trim: true
   },
   phone: {
@@ -29,10 +28,12 @@ const kitchenSchema = new Schema({
     trim: true
   },
   postalCode: {
-    type: Number
+    type: Number,
+    required: true
   },
   region: {
-    type: String
+    type: String,
+    required: true
   },
   size: {
     type: Number,
