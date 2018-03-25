@@ -19,6 +19,9 @@ export const createAndTranslate = ({ bodymen: { body } }, res, next) => {
       for (const key in body.translations[group].fr) {
         maps[i].push(key)
       }
+      for (const key in body.translations[group].en) {
+        maps[i].push(key)
+      }
       i++
     }
   }
@@ -26,14 +29,16 @@ export const createAndTranslate = ({ bodymen: { body } }, res, next) => {
   const translate = (i) => {
     const translateGroup = (j) => {
       if (maps[i] && j < maps[i].length) {
-        const phrase = body.translations[groups[i]].fr[maps[i][j]]
-        translator('fr', 'nl', phrase, (nl, err) => {
-          translator('fr', 'en', phrase, (en, err) => {
-            if (!err && nl.isCorrect === true) {
-              console.log(phrase + ' - ' + nl.text + ' - ' + en.text)
+        var lang = body.translations[groups[i]].fr[maps[i][j]] ? 'fr' : 'en'
+        var phrase = body.translations[groups[i]][lang][maps[i][j]]
+        var target2 = lang === 'fr' ? 'en' : 'fr'
+        translator(lang, 'nl', phrase, (data1, err) => {
+          translator(lang, target2, phrase, (data2, err) => {
+            if (!err && data1.isCorrect === true) {
+              console.log(phrase + ' - ' + data1.text + ' - ' + data2.text)
               if (phrase) {
-                body.translations[groups[i]].nl[maps[i][j]] = nl.text
-                body.translations[groups[i]].en[maps[i][j]] = en.text
+                body.translations[groups[i]].nl[maps[i][j]] = data1.text
+                body.translations[groups[i]][target2][maps[i][j]] = data2.text
               }
             } else {
               console.log(err)
