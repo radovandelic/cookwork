@@ -4,6 +4,7 @@ import auth from './auth'
 import passwordReset from './password-reset'
 import kitchen from './kitchen'
 import mail from './mail'
+import translation from './translation'
 
 const router = new Router()
 
@@ -35,5 +36,6 @@ router.use('/auth', auth)
 router.use('/password-resets', passwordReset)
 router.use('/kitchens', kitchen)
 router.use('/mails', mail)
+router.use('/translations', translation)
 
 export default router
