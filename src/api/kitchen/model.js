@@ -92,7 +92,8 @@ const kitchenSchema = new Schema({
   toJSON: {
     virtuals: true,
     transform: (obj, ret) => { delete ret._id }
-  }
+  },
+  usePushEach: true
 })
 
 kitchenSchema.methods = {

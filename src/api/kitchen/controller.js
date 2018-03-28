@@ -59,7 +59,7 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
             kitchen.images = kitchen.images ? kitchen.images : []
             kitchen.images.push({ large, thumbnail })
           }
-          return kitchen.save()
+          return kitchen ? kitchen.save() : null
         })
         .catch(err => err)
     )
@@ -73,7 +73,7 @@ export const deleteImages = ({ user, bodymen: { body }, params }, res, next) =>
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))
     .then((kitchen) => {
-      if (kitchen) {
+      if (kitchen && body.images) {
         for (const image of body.images) {
           kitchen.images.pull({ _id: image._id })
         }
