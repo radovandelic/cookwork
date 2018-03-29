@@ -121,6 +121,7 @@ kitchenSchema.methods = {
     const extendedView = {
       ...view,
       description: this.description,
+      days: this.days,
       hours: this.hours,
       capacity: this.capacity,
       equipment: this.equipment,
