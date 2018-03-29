@@ -48,6 +48,9 @@ const kitchenSchema = new Schema({
     required: true,
     trim: true
   },
+  days: {
+    type: Object
+  },
   hours: {
     type: Object
   },

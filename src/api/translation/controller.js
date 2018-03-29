@@ -2,6 +2,8 @@ import { success, notFound } from '../../services/response/'
 import { Translation } from '.'
 import translator from 'google-translator'
 
+// don't touch this, this is not for you.
+
 export const create = ({ bodymen: { body } }, res, next) =>
   Translation.create(body)
     .then((translation) => translation.view(true))
@@ -37,8 +39,8 @@ export const createAndTranslate = ({ bodymen: { body } }, res, next) => {
             if (!err && data1.isCorrect === true) {
               console.log(phrase + ' - ' + data1.text + ' - ' + data2.text)
               if (phrase) {
-                body.translations[groups[i]].nl[maps[i][j]] = data1.text
-                body.translations[groups[i]][target2][maps[i][j]] = data2.text
+                body.translations[groups[i]].nl[maps[i][j]] = body.translations[groups[i]].nl[maps[i][j]] || data1.text
+                body.translations[groups[i]][target2][maps[i][j]] = body.translations[groups[i]][target2][maps[i][j]] || data2.text
               }
             } else {
               console.log(err)

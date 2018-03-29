@@ -8,7 +8,7 @@ export const create = ({ user, bodymen: { body } }, res, next) =>
     .then(success(res, 201))
     .catch(next)
 
-export const index = ({ querymen: { query, select, cursor }, params }, res, next) => {
+export const index = ({ querymen: { query, select, cursor }, params }, res, next) =>
   Kitchen.count(query)
     .then(count => Kitchen.find(query, select, cursor)
       .populate('user')
@@ -20,7 +20,6 @@ export const index = ({ querymen: { query, select, cursor }, params }, res, next
     )
     .then(success(res))
     .catch(next)
-}
 
 export const show = ({ user, params }, res, next) =>
   Kitchen.findById(params.id)
@@ -58,8 +57,10 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
           if (kitchen) {
             kitchen.images = kitchen.images ? kitchen.images : []
             kitchen.images.push({ large, thumbnail })
+            return kitchen.save()
+          } else {
+            return null
           }
-          return kitchen ? kitchen.save() : null
         })
         .catch(err => err)
     )

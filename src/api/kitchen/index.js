@@ -7,8 +7,8 @@ import Kitchen, { schema } from './model'
 export { Kitchen, schema }
 
 const router = new Router()
-const { name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, hours, capacity, price, rent,
-  equipment, staff, cancellation, events, standingCapacity, sittingCapacity, verified } = schema.tree
+const { name, phone, description, type, address, postalCode, region, size, AFSCA, VAT, days, hours, capacity, price,
+  rent, equipment, staff, cancellation, events, standingCapacity, sittingCapacity, verified } = schema.tree
 const image = { type: String }
 const images = { type: Object }
 
@@ -54,6 +54,7 @@ router.post('/',
     size,
     AFSCA,
     VAT,
+    days,
     hours,
     capacity,
     price,
