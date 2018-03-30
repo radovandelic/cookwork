@@ -64,7 +64,8 @@ router.post('/',
     cancellation,
     events,
     standingCapacity,
-    sittingCapacity
+    sittingCapacity,
+    verified: false
   }),
   create)
 
