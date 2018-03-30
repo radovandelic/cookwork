@@ -126,7 +126,7 @@ router.post('/',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ name, firstName, lastName, picture, lang }),
+  body({ name, firstName, lastName, kitchenOwner, picture, lang }),
   update)
 
 /**
