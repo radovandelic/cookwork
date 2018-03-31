@@ -6,7 +6,7 @@ export const success = (res, status) => (entity) => {
 }
 
 export const notFound = (res) => (entity) => {
-  if (entity) {
+  if (entity && entity.length !== 0) {
     return entity
   }
   res.status(404).end()

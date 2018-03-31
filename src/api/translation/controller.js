@@ -2,7 +2,11 @@ import { success, notFound } from '../../services/response/'
 import { Translation } from '.'
 import translator from 'google-translator'
 
-// don't touch this, this is not for you.
+/**
+|--------------------------------------------------
+| don't touch this, this is not for you.
+|--------------------------------------------------
+*/
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Translation.create(body)

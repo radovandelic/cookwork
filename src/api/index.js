@@ -5,6 +5,7 @@ import passwordReset from './password-reset'
 import kitchen from './kitchen'
 import mail from './mail'
 import translation from './translation'
+import order from './order'
 
 const router = new Router()
 
@@ -37,5 +38,6 @@ router.use('/password-resets', passwordReset)
 router.use('/kitchens', kitchen)
 router.use('/mails', mail)
 router.use('/translations', translation)
+router.use('/orders', order)
 
 export default router

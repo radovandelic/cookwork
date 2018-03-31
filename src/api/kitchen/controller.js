@@ -27,7 +27,7 @@ export const show = ({ user, params }, res, next) =>
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'guest'))
     .then((kitchen) => {
-      return kitchen ? kitchen.view(true) : null
+      return kitchen ? kitchen.view(true, kitchen.role) : null
     })
     .then(success(res))
     .catch(next)

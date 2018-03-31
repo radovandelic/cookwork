@@ -6,21 +6,15 @@ import { createAndTranslate, create, index, show } from './controller'
 import Translation, { schema } from './model'
 export { Translation, schema }
 
+/**
+|--------------------------------------------------
+| Nothing to see here. Get out. Now.
+|--------------------------------------------------
+*/
+
 const router = new Router()
 const { translations } = schema.tree
 
-/**
- * @api {post} /translations Create translation
- * @apiName CreateTranslation
- * @apiGroup Translation
- * @apiPermission admin
- * @apiParam {String} access_token admin access token.
- * @apiParam translations Translation's translations.
- * @apiSuccess {Object} translation Translation's data.
- * @apiError {Object} 400 Some parameters may contain invalid values.
- * @apiError 404 Translation not found.
- * @apiError 401 admin access only.
- */
 router.post('/',
   token({ required: true, roles: ['admin'] }),
   body({ translations }),
@@ -31,27 +25,10 @@ router.post('/init',
   body({ translations }),
   createAndTranslate)
 
-/**
- * @api {get} /translations Retrieve translations
- * @apiName RetrieveTranslations
- * @apiGroup Translation
- * @apiUse listParams
- * @apiSuccess {Number} count Total amount of translations.
- * @apiSuccess {Object[]} rows List of translations.
- * @apiError {Object} 400 Some parameters may contain invalid values.
- */
 router.get('/',
   query(),
   index)
 
-/**
- * @api {get} /translations/:id Retrieve translation
- * @apiName RetrieveTranslation
- * @apiGroup Translation
- * @apiSuccess {Object} translation Translation's data.
- * @apiError {Object} 400 Some parameters may contain invalid values.
- * @apiError 404 Translation not found.
- */
 router.get('/:id',
   show)
 
