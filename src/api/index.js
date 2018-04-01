@@ -6,6 +6,7 @@ import kitchen from './kitchen'
 import mail from './mail'
 import translation from './translation'
 import order from './order'
+import info from './info'
 
 const router = new Router()
 
@@ -39,5 +40,6 @@ router.use('/kitchens', kitchen)
 router.use('/mails', mail)
 router.use('/translations', translation)
 router.use('/orders', order)
+router.use('/infos', info)
 
 export default router

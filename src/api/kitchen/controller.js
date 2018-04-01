@@ -38,7 +38,7 @@ export const update = ({ user, bodymen: { body }, params }, res, next) =>
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))
     .then((kitchen) => {
-      for (let key in body) { if (!body[key]) delete body[key] }
+      for (let key in body) { if (!body[key] && body[key] !== false) delete body[key] }
       return kitchen ? Object.assign(kitchen, body).save() : null
     })
     .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)

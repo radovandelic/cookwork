@@ -1,8 +1,11 @@
 import { success, notFound, authorOrAdmin } from '../../services/response/'
+import { sendOrderDetailsToStaff, sendOrderDetailsToUser } from '../../services/mailgun'
 import { Order } from '.'
 
 export const create = ({ user, bodymen: { body } }, res, next) =>
   Order.create({ ...body, user })
+    .then((order) => sendOrderDetailsToStaff(order, user, order.kitchen))
+    .then((order) => sendOrderDetailsToUser(user.email, order, order.kitchen))
     .then((order) => order.view(true))
     .then(success(res, 201))
     .catch(next)
@@ -23,7 +26,7 @@ export const show = ({ params }, res, next) =>
   Order.findById(params.id)
     .populate('user')
     .then(notFound(res))
-    .then((order) => order ? order.view() : null)
+    .then((order) => order ? order.view(true) : null)
     .then(success(res))
     .catch(next)
 

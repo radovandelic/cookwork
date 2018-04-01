@@ -16,6 +16,13 @@ const userSchema = new Schema({
     trim: true,
     lowercase: true
   },
+  region: {
+    type: String
+  },
+  phone: {
+    type: String,
+    trim: true
+  },
   password: {
     type: String,
     required: true,
@@ -42,6 +49,13 @@ const userSchema = new Schema({
     enum: roles,
     default: 'user'
   },
+  kitchenOwner: {
+    type: Boolean,
+    default: false
+  },
+  activity: {
+    type: String
+  },
   picture: {
     type: String,
     trim: true
@@ -54,10 +68,6 @@ const userSchema = new Schema({
     type: String
   },
   verified: {
-    type: Boolean,
-    default: false
-  },
-  kitchenOwner: {
     type: Boolean,
     default: false
   }
@@ -96,7 +106,7 @@ userSchema.methods = {
     let fields = ['id', 'name', 'picture']
 
     if (full) {
-      fields = [...fields, 'email', 'createdAt', 'firstName', 'lastName', 'kitchenOwner', 'lang', 'verified']
+      fields = [...fields, 'email', 'region', 'phone', 'createdAt', 'firstName', 'lastName', 'kitchenOwner', 'activity', 'lang', 'verified']
     }
 
     fields.forEach((field) => { view[field] = this[field] })
