@@ -24,7 +24,10 @@ export const sendVerificationMail = (email, id, token) =>
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) reject(Error(err))
-      else resolve(info)
+      else {
+        console.log(info.response, '|', info.rejected[0] || info.accepted[0])
+        resolve(info)
+      }
     })
   })
 
@@ -99,7 +102,7 @@ export const sendOrderDetailsToUser = (email, order, kitchen) =>
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) reject(Error(err))
       else {
-        console.log(info)
+        console.log(info.response, '|', info.rejected[0] || info.accepted[0])
         resolve(order)
       }
     })
@@ -179,7 +182,7 @@ export const sendOrderDetailsToStaff = (order, user, kitchen) =>
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) reject(Error(err))
       else {
-        console.log(info)
+        console.log(info.response, '|', info.rejected[0] || info.accepted[0])
         resolve(order)
       }
     })
@@ -247,7 +250,7 @@ export const sendInfoToStaff = (info, user) =>
     transporter.sendMail(mailOptions, (err, msgInfo) => {
       if (err) reject(Error(err))
       else {
-        console.log(msgInfo)
+        console.log(msgInfo.response, '|', msgInfo.rejected[0] || user.email)
         resolve(info)
       }
     })
@@ -260,8 +263,8 @@ export const sendEnquiryMail = (from, message) =>
       'Message sent from the cookwork.eu platform.\n' +
       `enquirer's email: <${from}>`
 
-    let html = message.replace(/\n/g, '<br/>')
-    html = html.replace(/<(.+)>/g, '<a href="mailto:$1">$1</a>')
+    let html = message.replace(/<(.+)>/g, '<a href="mailto:$1">$1</a>')
+    html = html.replace(/\n/g, '<br/>')
 
     // setup email data with unicode symbols
     const mailOptions = {
