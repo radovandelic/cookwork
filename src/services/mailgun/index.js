@@ -202,8 +202,7 @@ export const sendInfoToStaff = (info, user) =>
       case 'once':
         text += `
         Type: one time
-        Timeframe: ${dateFrom}, ${info.hoursFrom}:00 - ${dateTo}, ${info.hoursTo}:00
-        `
+        Timeframe: ${dateFrom}, ${info.hoursFrom}:00 - ${dateTo}, ${info.hoursTo}:00`
         break
 
       case 'recurring':
@@ -211,21 +210,21 @@ export const sendInfoToStaff = (info, user) =>
         const daysTo = weekDays['en'][weekDays.map[info.daysTo]]
         text += `
         Type: recurring
-        Timeframe: ${daysFrom} to ${daysTo}, ${info.hoursFrom}:00 - ${info.hoursTo}:00
-        `
+        Timeframe: ${daysFrom} to ${daysTo}, ${info.hoursFrom}:00 - ${info.hoursTo}:00`
         break
 
       case 'long':
         text += `
         Type: long term
-        Timeframe: ${dateFrom} to ${dateTo}
-        `
+        Timeframe: ${dateFrom} to ${dateTo}`
         break
 
       default:
         break
     }
     text += `
+        Comments: ${info.comments}
+        
         User details:
         Name: ${user.firstName} ${user.lastName}
         Activity: ${info.activity}
