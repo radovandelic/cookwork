@@ -5,7 +5,7 @@ let user, order
 
 beforeEach(async () => {
   user = await User.create({ email: 'a@a.com', password: '123456' })
-  order = await Order.create({ user, type: 'test', dateFrom: 'test', dateTo: 'test', daysFrom: 'test', daysTo: 'test', hoursFrom: 'test', hoursTo: 'test', totalDays: 'test', totalHours: 'test', totalPrice: 'test', kitchen: 'test' })
+  order = await Order.create({ user, type: 'test', dateFrom: Date.now(), dateTo: Date.now(), daysFrom: 1, daysTo: 0, hoursFrom: 0, hoursTo: 24, totalDays: 7, totalHours: 40, totalPrice: 2000, kitchen: { name: 'test_kitchen' } })
 })
 
 describe('view', () => {

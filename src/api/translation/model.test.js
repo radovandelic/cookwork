@@ -3,7 +3,7 @@ import { Translation } from '.'
 let translation
 
 beforeEach(async () => {
-  translation = await Translation.create({ translations: 'test' })
+  translation = await Translation.create({ translations: { index: { fr: { hello: 'Bonjour' } } } })
 })
 
 describe('view', () => {

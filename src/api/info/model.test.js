@@ -4,8 +4,8 @@ import { User } from '../user'
 let user, info
 
 beforeEach(async () => {
-  user = await User.create({ email: 'a@a.com', password: '123456' })
-  info = await Info.create({ user, activity: 'test', purpose: 'test', region: 'test', phone: 'test', type: 'test', dateFrom: 'test', dateTo: 'test', daysFrom: 'test', daysFrom: 'test', daysTo: 'test', hoursFrom: 'test', hoursTo: 'test', comments: 'test' })
+  user = await User.create({ email: 'a@b.cd', password: 'password' })
+  info = await Info.create({ user, activity: 'caterer', purpose: 'test', region: 'Bruxelles', phone: '011', type: 'once', dateFrom: Date.now(), dateTo: Date.now(), daysFrom: 1, daysTo: 0, hoursFrom: 0, hoursTo: 24, comments: 'This is a comment.' })
 })
 
 describe('view', () => {

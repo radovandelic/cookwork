@@ -52,7 +52,7 @@ describe('authorOrAdmin', () => {
       role: 'user'
     }
     entity = {
-      author: {
+      user: {
         id: 1,
         equals (id) {
           return id === this.id
@@ -62,12 +62,12 @@ describe('authorOrAdmin', () => {
   })
 
   it('returns the passed entity when author is the same', () => {
-    expect(response.authorOrAdmin(res, user, 'author')(entity)).toEqual(entity)
+    expect(response.authorOrAdmin(res, user, 'author')(entity)).toEqual({ ...entity, role: user.role })
   })
 
   it('returns the passed entity when author is admin', () => {
     user.role = 'admin'
-    expect(response.authorOrAdmin(res, user, 'user')(entity)).toEqual(entity)
+    expect(response.authorOrAdmin(res, user, 'user')(entity)).toEqual({ ...entity, role: user.role })
   })
 
   it('responds with status 401 when author is not the same or admin', () => {

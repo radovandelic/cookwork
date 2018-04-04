@@ -64,7 +64,7 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
         })
         .catch(err => err)
     )
-    .then((kitchen) => kitchen ? kitchen.view(true, 'user') : null)
+    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
@@ -83,7 +83,7 @@ export const deleteImages = ({ user, bodymen: { body }, params }, res, next) =>
         return null
       }
     })
-    .then((kitchen) => kitchen ? kitchen.view(true, 'user') : null)
+    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
