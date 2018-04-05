@@ -1,6 +1,7 @@
 {
   "name": "cookwork",
-  "version": "0.0.0",
+  "homepage": "https://cookwork.eu/api",
+  "version": "1.0.0",
   "main": "src",
   "private": true,
   "scripts": {
