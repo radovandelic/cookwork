@@ -16,7 +16,7 @@ export const index = ({ querymen: { query, select, cursor } }, res, next) =>
       .populate('user')
       .then((orders) => ({
         count,
-        rows: orders.map((order) => order.view())
+        rows: orders.map((order) => order.view(true))
       }))
     )
     .then(success(res))

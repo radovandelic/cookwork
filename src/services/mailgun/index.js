@@ -81,7 +81,7 @@ export const sendOrderDetailsToUser = (email, order, kitchen) =>
     Region: ${kitchen.region}
     Listed hourly price: €${kitchen.price}
 
-    For additional information, you can contact Cookwork at elodie@co-oking.be
+    For additional information, you can contact Cookwork at contact@cookwork.be
 
     This is an automated message from the CookWork platform.
     `
