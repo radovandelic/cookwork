@@ -80,6 +80,7 @@ router.post('/register',
     email,
     password,
     name,
+    phone,
     firstName,
     lastName,
     picture,
@@ -109,7 +110,7 @@ router.post('/register',
  */
 router.post('/',
   master(),
-  body({ email, password, name, firstName, lastName, picture, role, lang, kitchenOwner, verifyToken, verified }),
+  body({ email, password, phone, name, firstName, lastName, picture, role, lang, kitchenOwner, verifyToken, verified }),
   create)
 
 /**

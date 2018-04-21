@@ -1,13 +1,13 @@
 import nodemailer from 'nodemailer'
 import { transportOptions, supportEmail } from '../../config'
-import { weekDays } from '../../data'
+import { weekDays, mails } from '../../data'
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport(
   transportOptions
 )
 
-export const sendVerificationMail = (email, id, token) =>
+export const sendVerificationMail = (email, id, token, lang) =>
   new Promise((resolve, reject) => {
     // generate random token
     let url = 'https://cookwork.eu/verifyaccount/' + id + '/' + token
@@ -16,9 +16,9 @@ export const sendVerificationMail = (email, id, token) =>
     const mailOptions = {
       from: '"Cookwork Account Verification" <noreply@cookwork.eu>', // sender address
       to: email, // list of receivers
-      subject: 'Please verify your Cookwork account ✔', // Subject line
-      text: 'Please confirm your account', // plain text body
-      html: `Please confirm your account by clicking the following link: <a href="${url}">link</a>` // html body
+      subject: mails[lang].verificationMailSubject, // Subject line
+      text: 'Please confirm your account by visiting the following url: ' + url, // plain text body
+      html: mails[lang].verificationMail(url) // html body
     }
 
     // send mail with defined transport object
@@ -31,69 +31,40 @@ export const sendVerificationMail = (email, id, token) =>
     })
   })
 
-export const sendOrderDetailsToUser = (email, order, kitchen) =>
+export const sendOrderDetailsToUser = (email, order, kitchen, lang) =>
   new Promise((resolve, reject) => {
-    let dateFrom = order.dateFrom ? order.dateFrom.toLocaleDateString('nl-BE') : undefined
-    let dateTo = order.dateTo ? order.dateTo.toLocaleDateString('nl-BE') : undefined
+    order.dateFromString = order.dateFrom ? order.dateFrom.toLocaleDateString('nl-BE') : undefined
+    order.dateToString = order.dateTo ? order.dateTo.toLocaleDateString('nl-BE') : undefined
     let text = ``
     let html = ``
     switch (order.type) {
       case 'once':
-        text += `You have succesfully placed your order.
-
-        Order details:
-        Timeframe: ${dateFrom}, ${order.hoursFrom}:00 - ${dateTo}, ${order.hoursTo}:00
-        Days: ${order.totalDays}
-        Hours: ${order.totalHours}
-        Estimated price: €${order.totalPrice} (including service fee, excluding VAT)
-        `
+        text += mails[lang].sendOrderDetailsToUserOnce(order)
         break
 
       case 'recurring':
-        const daysFrom = weekDays['en'][weekDays.map[order.daysFrom]]
-        const daysTo = weekDays['en'][weekDays.map[order.daysTo]]
-        text += `You have succesfully placed your weekly reservation.
-
-        Order details:
-        Timeframe: ${daysFrom} to ${daysTo}, ${order.hoursFrom}:00 - ${order.hoursTo}:00
-        Days per week: ${order.totalDays}
-        Hours per week: ${order.totalHours}
-        Estimated price: €${order.totalPrice} per week (including service fee, excluding VAT)
-        `
+        order.daysFromString = weekDays[lang][weekDays.map[order.daysFrom]]
+        order.daysToString = weekDays[lang][weekDays.map[order.daysTo]]
+        text += mails[lang].sendOrderDetailsToUserRecurring(order)
         break
 
       case 'long':
-        text += `You have succesfully placed your order.
-
-        Order details:
-        Timeframe: ${dateFrom} to ${dateTo}
-        Days: ${order.totalDays}
-        Estimated price: €${order.totalPrice} (including service fee, excluding VAT)
-      `
+        text += mails[lang].sendOrderDetailsToUserLong(order)
         break
 
       default:
         break
     }
-    text += `
-    Kitchen details:
-    Name: ${kitchen.name}
-    Region: ${kitchen.region}
-    Listed hourly price: €${kitchen.price}
+    text += mails[lang].sendOrderDetailsToUserFooter(kitchen)
 
-    For additional information, you can contact Cookwork at contact@cookwork.be
-
-    This is an automated message from the CookWork platform.
-    `
-    // text += order.type === 'long' ? `Listed monthly rent: €${kitchen.rent}` : ``
-    html = text.replace(/Cookwork at (.+)\n/, '<a href=mailto:$1>$1</a><br/>')
+    html = text.replace(supportEmail, `<a href=mailto:${supportEmail}>${supportEmail}</a><br/>`)
     html = html.replace(/\n/g, '<br/>')
 
     // setup email data with unicode symbols
     const mailOptions = {
       from: '"Cookwork" <noreply@cookwork.eu>', // sender address
       to: email, // list of receivers
-      subject: 'New Cookwork Order ✔', // Subject line
+      subject: mails[lang].sendOrderDetailsToUserSubject, // Subject line
       text, // plain text body
       html: html // html body
     }
@@ -110,8 +81,9 @@ export const sendOrderDetailsToUser = (email, order, kitchen) =>
 
 export const sendOrderDetailsToStaff = (order, user, kitchen) =>
   new Promise((resolve, reject) => {
-    let dateFrom = order.dateFrom ? order.dateFrom.toLocaleDateString('nl-BE') : undefined
-    let dateTo = order.dateTo ? order.dateTo.toLocaleDateString('nl-BE') : undefined
+    order.dateFromString = order.dateFrom ? order.dateFrom.toLocaleDateString('nl-BE') : undefined
+    order.dateToString = order.dateTo ? order.dateTo.toLocaleDateString('nl-BE') : undefined
+
     let text = ``
     let html = ``
     switch (order.type) {
@@ -119,7 +91,7 @@ export const sendOrderDetailsToStaff = (order, user, kitchen) =>
         text += `${user.firstName} ${user.lastName} has placed a new order.
 
         Order details:
-        Timeframe: ${dateFrom}, ${order.hoursFrom}:00 - ${dateTo}, ${order.hoursTo}:00
+        Timeframe: ${order.dateFromString}, ${order.hoursFrom}:00 - ${order.dateToString}, ${order.hoursTo}:00
         Days: ${order.totalDays}
         Hours: ${order.totalHours}
         Estimated price: €${order.totalPrice} (including service fee, excluding VAT)
@@ -127,12 +99,12 @@ export const sendOrderDetailsToStaff = (order, user, kitchen) =>
         break
 
       case 'recurring':
-        const daysFrom = weekDays['en'][weekDays.map[order.daysFrom]]
-        const daysTo = weekDays['en'][weekDays.map[order.daysTo]]
+        order.daysFromString = weekDays['en'][weekDays.map[order.daysFrom]]
+        order.daysToString = weekDays['en'][weekDays.map[order.daysTo]]
         text += `${user.firstName} ${user.lastName} has placed a new recurring order.
 
         Order details:
-        Timeframe: ${daysFrom} to ${daysTo}, ${order.hoursFrom}:00 - ${order.hoursTo}:00
+        Timeframe: ${order.daysFromString} to ${order.daysToString}, ${order.hoursFrom}:00 - ${order.hoursTo}:00
         Days per week: ${order.totalDays}
         Hours per week: ${order.totalHours}
         Estimated price: €${order.totalPrice} per week (including service fee, excluding VAT)
@@ -143,7 +115,7 @@ export const sendOrderDetailsToStaff = (order, user, kitchen) =>
         text += `${user.firstName} ${user.lastName} has placed a new long term order.
 
         Order details:
-        Timeframe: ${dateFrom} to ${dateTo}
+        Timeframe: ${order.dateFrom} to ${order.dateTo}
         Days: ${order.totalDays}
         Estimated price: €${order.totalPrice} (including service fee, excluding VAT)
         `
@@ -278,5 +250,30 @@ export const sendEnquiryMail = (from, message) =>
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) reject(Error(err))
       else resolve(info)
+    })
+  })
+
+export const sendKitchenChangeNotification = (user, kitchen) =>
+  new Promise((resolve, reject) => {
+    const message = mails[user.lang].kitchenInfoChange(kitchen, user.lang)
+    let html = message.replace(/<(.+)>/g, '<a href="mailto:$1">$1</a>')
+    html = html.replace(/\n/g, '<br/>')
+
+    // setup email data with unicode symbols
+    const mailOptions = {
+      from: '"Cookwork" <noreply@cookwork.eu>', // sender address
+      to: user.email, // list of receivers
+      subject: mails[user.lang].kitchenInfoChangeSubject, // Subject line
+      text: message, // plain text body
+      html: html // html body
+    }
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) reject(Error(err))
+      else {
+        console.log(info.response, '|', info.rejected[0] || info.accepted[0])
+        resolve(kitchen)
+      }
     })
   })

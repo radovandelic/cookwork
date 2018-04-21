@@ -6,7 +6,7 @@ const weekDays = {
     thursday: 'Jeudi',
     friday: 'Vendredi',
     saturday: 'Samedi',
-    sunday: 'Dimanch'
+    sunday: 'Dimanche'
   },
   nl: {
     monday: 'Maandag',

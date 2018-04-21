@@ -1,5 +1,6 @@
 import { success, notFound, authorOrAdmin } from '../../services/response/'
 import { uploadImg } from '../../services/cloudinary'
+import { sendKitchenChangeNotification } from '../../services/mailgun'
 import { Kitchen } from '.'
 
 export const create = ({ user, bodymen: { body } }, res, next) =>
@@ -26,9 +27,7 @@ export const show = ({ user, params }, res, next) =>
     .populate('user')
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'guest'))
-    .then((kitchen) => {
-      return kitchen ? kitchen.view(true, kitchen.role) : null
-    })
+    .then((kitchen) => kitchen.view ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
@@ -41,7 +40,8 @@ export const update = ({ user, bodymen: { body }, params }, res, next) =>
       for (let key in body) { if (!body[key] && body[key] !== false) delete body[key] }
       return kitchen ? Object.assign(kitchen, body).save() : null
     })
-    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
+    .then((kitchen) => body.verified === true ? sendKitchenChangeNotification(kitchen.user, kitchen) : kitchen)
+    .then((kitchen) => kitchen.view ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
@@ -64,7 +64,7 @@ export const updateImage = ({ user, bodymen: { body }, params }, res, next) =>
         })
         .catch(err => err)
     )
-    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
+    .then((kitchen) => kitchen.view ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
@@ -83,7 +83,7 @@ export const deleteImages = ({ user, bodymen: { body }, params }, res, next) =>
         return null
       }
     })
-    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
+    .then((kitchen) => kitchen.view ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 
@@ -92,7 +92,7 @@ export const findByUser = ({ user, params }, res, next) =>
     .populate('user')
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))
-    .then((kitchen) => kitchen ? kitchen.view(true, kitchen.role) : null)
+    .then((kitchen) => kitchen.view ? kitchen.view(true, kitchen.role) : null)
     .then(success(res))
     .catch(next)
 

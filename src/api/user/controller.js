@@ -52,7 +52,7 @@ export const create = ({ bodymen: { body } }, res, next) =>
     .then(user => {
       sign(user.id)
         .then((token) => ({ token, user: user.view(true) }))
-        .then(sendVerificationMail(user.email, user.id, body.verifyToken))
+        .then(sendVerificationMail(user.email, user.id, body.verifyToken, user.lang))
         .then(success(res, 201))
     })
     .catch((err) => {
