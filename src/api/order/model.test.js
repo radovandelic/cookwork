@@ -4,8 +4,8 @@ import { User } from '../user'
 let user, order
 
 beforeEach(async () => {
-  user = await User.create({ email: 'a@a.com', password: '123456' })
-  order = await Order.create({ user, type: 'test', dateFrom: Date.now(), dateTo: Date.now(), daysFrom: 1, daysTo: 0, hoursFrom: 0, hoursTo: 24, totalDays: 7, totalHours: 40, totalPrice: 2000, kitchen: { name: 'test_kitchen' } })
+  user = await User.create({ email: 'a@a.com', password: '123456', lang: 'en' })
+  order = await Order.create({ user, type: 'once', dateFrom: Date.now(), dateTo: Date.now(), daysFrom: 1, daysTo: 0, hoursFrom: 0, hoursTo: 24, totalDays: 7, totalHours: 40, totalPrice: 2000, kitchen: { name: 'test_kitchen', region: 'Antwerpen', price: 20 } })
 })
 
 describe('view', () => {

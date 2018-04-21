@@ -7,13 +7,13 @@ import routes, { Order } from '.'
 
 const app = () => express(apiRoot, routes)
 
-const testOrder = { type: 'test', dateFrom: Date.now(), dateTo: Date.now(), daysFrom: 1, daysTo: 0, hoursFrom: 0, hoursTo: 24, totalDays: 7, totalHours: 40, totalPrice: 2000, kitchen: { name: 'test_kitchen' } }
+const testOrder = { type: 'once', dateFrom: Date.now(), dateTo: Date.now(), daysFrom: 1, daysTo: 0, hoursFrom: 0, hoursTo: 24, totalDays: 7, totalHours: 40, totalPrice: 2000, kitchen: { name: 'test_kitchen', region: 'Antwerpen', price: 20 } }
 let userSession, anotherSession, adminSession, order
 
 beforeEach(async () => {
-  const user = await User.create({ firstName: 'Test', lastName: 'Testinson', email: 'test@test.com', password: '123456' })
-  const anotherUser = await User.create({ firstName: 'Test', lastName: 'Testinson', email: 'test2@test.com', password: '123456' })
-  const admin = await User.create({ firstName: 'Test', lastName: 'Testinson', email: 'admin@test.com', password: '123456', role: 'admin' })
+  const user = await User.create({ firstName: 'Test', lastName: 'Testinson', email: 'test@test.com', password: '123456', lang: 'en' })
+  const anotherUser = await User.create({ firstName: 'Test', lastName: 'Testinson', email: 'test2@test.com', password: '123456', lang: 'en' })
+  const admin = await User.create({ firstName: 'Test', lastName: 'Testinson', email: 'admin@test.com', password: '123456', role: 'admin', lang: 'en' })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id)
   adminSession = signSync(admin.id)

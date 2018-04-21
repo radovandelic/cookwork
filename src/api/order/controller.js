@@ -5,7 +5,7 @@ import { Order } from '.'
 export const create = ({ user, bodymen: { body } }, res, next) =>
   Order.create({ ...body, user })
     .then((order) => sendOrderDetailsToStaff(order, user, order.kitchen))
-    .then((order) => sendOrderDetailsToUser(user.email, order, order.kitchen))
+    .then((order) => sendOrderDetailsToUser(user.email, order, order.kitchen, user.lang))
     .then((order) => order.view(true))
     .then(success(res, 201))
     .catch(next)
