@@ -1,0 +1,7 @@
+{
+    "name": "cookwork",
+    "title": "cookwork api",
+    "url": "https://cookwork.eu/api",
+    "description": "This is the main backend API for the cookwork project.",
+    "version": "1.0.0"
+}

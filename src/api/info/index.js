@@ -15,19 +15,18 @@ const { activity, purpose, region, phone, type, dateFrom, dateTo, daysFrom, days
  * @apiGroup Info
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam activity Info's activity.
- * @apiParam purpose Info's purpose.
- * @apiParam region Info's region.
- * @apiParam phone Info's phone.
- * @apiParam type Info's type.
- * @apiParam dateFrom Info's dateFrom.
- * @apiParam dateTo Info's dateTo.
- * @apiParam daysFrom Info's daysFrom.
- * @apiParam daysFrom Info's daysFrom.
- * @apiParam daysTo Info's daysTo.
- * @apiParam hoursFrom Info's hoursFrom.
- * @apiParam hoursTo Info's hoursTo.
- * @apiParam comments Info's comments.
+ * @apiParam {String} activity User's activity.
+ * @apiParam {String} [purpose] User's renting purpose.
+ * @apiParam {String} [region] User's target region.
+ * @apiParam {String} [phone] User's phone.
+ * @apiParam {String} [type] User's target kitchen type.
+ * @apiParam {Date} [dateFrom] User's dateFrom.
+ * @apiParam {Date} [dateTo] User's dateTo.
+ * @apiParam {Number} [daysFrom] User's daysFrom.
+ * @apiParam {Number} [daysTo] User's daysTo.
+ * @apiParam {Number} [hoursFrom] User's hoursFrom.
+ * @apiParam {Number} [hoursTo] User's hoursTo.
+ * @apiParam {String} [comments] User's comments.
  * @apiSuccess {Object} info Info's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Info not found.

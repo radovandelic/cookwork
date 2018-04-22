@@ -40,7 +40,7 @@ router.get('/me',
   showMe)
 
 /**
-* @api {get} /users/:id Verify user account
+* @api {get} /users/:id/:token Verify user account
 * @apiName VerifyUser
 * @apiGroup User
 * @apiPermission public
@@ -69,7 +69,12 @@ router.get('/:id',
  * @apiParam {String} email User's email.
  * @apiParam {String{6..}} password User's password.
  * @apiParam {String} [name] User's name.
+ * @apiParam {String} [phone] User's phone.
+ * @apiParam {String} [firstName] User's first name.
+ * @apiParam {String} [lastName] User's last name.
  * @apiParam {String} [picture] User's picture.
+ * @apiParam {Boolean} [kitchenOwner=false] User is kitchen owner or not.
+ * @apiParam {String} [lang="fr"] User's language preference.
  * @apiSuccess (Sucess 201) {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Master access only.
@@ -101,8 +106,13 @@ router.post('/register',
  * @apiParam {String} email User's email.
  * @apiParam {String{6..}} password User's password.
  * @apiParam {String} [name] User's name.
+ * @apiParam {String} [phone] User's phone.
+ * @apiParam {String} [firstName] User's first name.
+ * @apiParam {String} [lastName] User's last name.
  * @apiParam {String} [picture] User's picture.
+ * @apiParam {Boolean} [kitchenOwner=false] User is kitchen owner or not.
  * @apiParam {String=user,admin} [role=user] User's role.
+ * @apiParam {String} [lang="fr"] User's language preference.
  * @apiSuccess (Sucess 201) {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Master access only.
@@ -120,7 +130,14 @@ router.post('/',
  * @apiPermission user
  * @apiParam {String} access_token User access_token.
  * @apiParam {String} [name] User's name.
+ * @apiParam {String} [phone] User's phone.
+ * @apiParam {String} [firstName] User's first name.
+ * @apiParam {String} [lastName] User's last name.
+ * @apiParam {String} [region] User's home region.
+ * @apiParam {String} [activity] User's professional activity.
  * @apiParam {String} [picture] User's picture.
+ * @apiParam {Boolean} [kitchenOwner] User is kitchen owner or not.
+ * @apiParam {String} [lang] User's language preference.
  * @apiSuccess {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Current user or admin access only.

@@ -9,10 +9,9 @@ const router = new Router()
  * @apiName Authenticate
  * @apiGroup Auth
  * @apiHeader {String} Authorization Basic authorization with email and password.
- * @apiParam {String} access_token Master access_token.
  * @apiSuccess (Success 201) {String} token User `access_token` to be passed to other requests.
  * @apiSuccess (Success 201) {Object} user Current user's data.
- * @apiError 401 Master access only or invalid credentials.
+ * @apiError 401 Invalid credentials.
  */
 router.post('/',
   password(),

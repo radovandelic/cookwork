@@ -18,24 +18,27 @@ const images = { type: Object }
  * @apiGroup Kitchen
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam name Kitchen's name.
- * @apiParam phone Kitchen's phone.
- * @apiParam description Kitchen's description.
- * @apiParam type Kitchen's type.
- * @apiParam address Kitchen's address.
- * @apiParam size Kitchen's size.
- * @apiParam AFSCA Kitchen's AFSCA.
- * @apiParam VAT Kitchen's VAT.
- * @apiParam hours Kitchen's hours.
- * @apiParam capacity Kitchen's capacity.
- * @apiParam price Kitchen's price.
- * @apiParam rent Kitchen's rent.
- * @apiParam equipment Kitchen's equipment.
- * @apiParam staff Kitchen's staff.
- * @apiParam cancellation Kitchen's cancellation.
- * @apiParam events Kitchen's events.
- * @apiParam standingCapacity Kitchen's standingCapacity.
- * @apiParam sittingCapacity Kitchen's sittingCapacity.
+ * @apiParam {String} [name] Kitchen's name.
+ * @apiParam {String} phone Kitchen's phone.
+ * @apiParam {String} [description] Kitchen's description.
+ * @apiParam {String} type Kitchen's type.
+ * @apiParam {String} address Kitchen's address.
+ * @apiParam {String} region Kitchen's region.
+ * @apiParam {Number} postalCode Kitchen's postal code.
+ * @apiParam {Number} size Kitchen's size.
+ * @apiParam {String} [AFSCA] Kitchen's AFSCA.
+ * @apiParam {String} VAT Kitchen's VAT.
+ * @apiParam {Object} days Kitchen's working weekdays. (e.g {daysFrom: 1, daysTo: 0})
+ * @apiParam {Object} hours Kitchen's work hours. (e.g {hoursFrom: 0, hoursTo: 24})
+ * @apiParam {Number} [capacity] Kitchen's capacity.
+ * @apiParam {Number} price Kitchen's hourly price, excl. service fee and VAT.
+ * @apiParam {Number} [rent] Kitchen's monthly price, excl. service fee and VAT.
+ * @apiParam {Object} [equipment] Kitchen's equipment.
+ * @apiParam {Object} [staff] Kitchen's additional services.
+ * @apiParam {String} [cancellation] Kitchen's cancellation policy.
+ * @apiParam {Boolean} [events] Kitchen's events.
+ * @apiParam {Number} [standingCapacity] Kitchen's standing capacity for events.
+ * @apiParam {Number} [sittingCapacity] Kitchen's sitting capacity for events.
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Kitchen not found.
@@ -73,6 +76,9 @@ router.post('/',
  * @api {get} /kitchens Retrieve kitchens
  * @apiName RetrieveKitchens
  * @apiGroup Kitchen
+ * @apiParam {Boolean} [verified] kitchen verification status.
+ * @apiParam {String} [region] kitchen region.
+ * @apiParam {String} [type] kitchen type.
  * @apiUse listParams
  * @apiSuccess {Number} count Total amount of kitchens.
  * @apiSuccess {Object[]} rows List of kitchens.
@@ -90,6 +96,7 @@ router.get('/',
  * @api {get} /kitchens/:id Retrieve kitchen
  * @apiName RetrieveKitchen
  * @apiGroup Kitchen
+ * @apiParam {String} [access_token] user access token for full view.
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Kitchen not found.
@@ -104,24 +111,28 @@ router.get('/:id',
  * @apiGroup Kitchen
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam name Kitchen's name.
- * @apiParam phone Kitchen's phone.
- * @apiParam description Kitchen's description.
- * @apiParam type Kitchen's type.
- * @apiParam address Kitchen's address.
- * @apiParam size Kitchen's size.
- * @apiParam AFSCA Kitchen's AFSCA.
- * @apiParam VAT Kitchen's VAT.
- * @apiParam hours Kitchen's hours.
- * @apiParam capacity Kitchen's capacity.
- * @apiParam price Kitchen's price.
- * @apiParam rent Kitchen's rent.
- * @apiParam equipment Kitchen's equipment.
- * @apiParam staff Kitchen's staff.
- * @apiParam cancellation Kitchen's cancellation.
- * @apiParam events Kitchen's events.
- * @apiParam standingCapacity Kitchen's standingCapacity.
- * @apiParam sittingCapacity Kitchen's sittingCapacity.
+ * @apiParam {String} [name] Kitchen's name.
+ * @apiParam {String} phone Kitchen's phone.
+ * @apiParam {String} [description] Kitchen's description.
+ * @apiParam {String} type Kitchen's type.
+ * @apiParam {String} address Kitchen's address.
+ * @apiParam {String} region Kitchen's region.
+ * @apiParam {Number} postalCode Kitchen's postal code.
+ * @apiParam {Number} size Kitchen's size.
+ * @apiParam {String} [AFSCA] Kitchen's AFSCA.
+ * @apiParam {String} VAT Kitchen's VAT.
+ * @apiParam {Object} days Kitchen's working weekdays. (e.g {daysFrom: 1, daysTo: 0})
+ * @apiParam {Object} hours Kitchen's work hours. (e.g {hoursFrom: 0, hoursTo: 24})
+ * @apiParam {Number} [capacity] Kitchen's capacity.
+ * @apiParam {Number} price Kitchen's hourly price, excl. service fee and VAT.
+ * @apiParam {Number} [rent] Kitchen's monthly price, excl. service fee and VAT.
+ * @apiParam {Object} [equipment] Kitchen's equipment.
+ * @apiParam {Object} [staff] Kitchen's additional services.
+ * @apiParam {String} [cancellation] Kitchen's cancellation policy.
+ * @apiParam {Boolean} [events] Kitchen's events.
+ * @apiParam {Number} [standingCapacity] Kitchen's standing capacity for events.
+ * @apiParam {Number} [sittingCapacity] Kitchen's sitting capacity for events.
+ * @apiParam {Boolean} [verified] Kitchen's verification status.
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Kitchen not found.
@@ -170,12 +181,12 @@ router.delete('/:id',
   destroy)
 
 /**
- * @api {post} /kitchens/:id/images/upload Upload kitchen image(s)
+ * @api {post} /kitchens/:id/images/upload Upload kitchen image
  * @apiName UploadImage
  * @apiGroup Kitchen
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam image Image to be added.
+ * @apiParam {String} image Image to be added (data-uri).
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 user access only.
@@ -192,7 +203,7 @@ router.put('/:id/images/upload',
  * @apiGroup Kitchen
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam images Image(s) to be deleted.
+ * @apiParam {Object[]} images Image(s) to be deleted.
  * @apiSuccess {Object} kitchen Kitchen's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 user access only.

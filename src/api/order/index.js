@@ -15,17 +15,17 @@ const { type, dateFrom, dateTo, daysFrom, daysTo, hoursFrom, hoursTo, totalDays,
  * @apiGroup Order
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam type Order's type.
- * @apiParam dateFrom Order's dateFrom.
- * @apiParam dateTo Order's dateTo.
- * @apiParam daysFrom Order's daysFrom.
- * @apiParam daysTo Order's daysTo.
- * @apiParam hoursFrom Order's hoursFrom.
- * @apiParam hoursTo Order's hoursTo.
- * @apiParam totalDays Order's totalDays.
- * @apiParam totalHours Order's totalHours.
- * @apiParam totalPrice Order's totalPrice.
- * @apiParam kitchen Order's kitchen.
+ * @apiParam {String="once", "recurring", "long"} type Order's type.
+ * @apiParam {Date} [dateFrom] Order's dateFrom.
+ * @apiParam {Date} [dateTo] Order's dateTo.
+ * @apiParam {Number} [daysFrom] Order's daysFrom.
+ * @apiParam {Number} [daysTo] Order's daysTo.
+ * @apiParam {Number} [hoursFrom] Order's hoursFrom.
+ * @apiParam {Number} [hoursTo] Order's hoursTo.
+ * @apiParam {Number} [totalDays] Order's totalDays.
+ * @apiParam {Number} [totalHours] Order's totalHours.
+ * @apiParam {Number} [totalPrice] Order's totalPrice.
+ * @apiParam {Object} kitchen Order's kitchen.
  * @apiSuccess {Object} order Order's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Order not found.
@@ -74,17 +74,17 @@ router.get('/:id',
  * @apiGroup Order
  * @apiPermission user
  * @apiParam {String} access_token user access token.
- * @apiParam type Order's type.
- * @apiParam dateFrom Order's dateFrom.
- * @apiParam dateTo Order's dateTo.
- * @apiParam daysFrom Order's daysFrom.
- * @apiParam daysTo Order's daysTo.
- * @apiParam hoursFrom Order's hoursFrom.
- * @apiParam hoursTo Order's hoursTo.
- * @apiParam totalDays Order's totalDays.
- * @apiParam totalHours Order's totalHours.
- * @apiParam totalPrice Order's totalPrice.
- * @apiParam kitchen Order's kitchen.
+ * @apiParam {String="once", "recurring", "long"} type Order's type.
+ * @apiParam {Date} [dateFrom] Order's dateFrom.
+ * @apiParam {Date} [dateTo] Order's dateTo.
+ * @apiParam {Number} [daysFrom] Order's daysFrom.
+ * @apiParam {Number} [daysTo] Order's daysTo.
+ * @apiParam {Number} [hoursFrom] Order's hoursFrom.
+ * @apiParam {Number} [hoursTo] Order's hoursTo.
+ * @apiParam {Number} [totalDays] Order's totalDays.
+ * @apiParam {Number} [totalHours] Order's totalHours.
+ * @apiParam {Number} [totalPrice] Order's totalPrice.
+ * @apiParam {Object} kitchen Order's kitchen.
  * @apiSuccess {Object} order Order's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Order not found.

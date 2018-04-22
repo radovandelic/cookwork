@@ -54,7 +54,7 @@ const config = {
   },
   test: {
     mongo: {
-      uri: `mongodb://infzgbgd:${process.env.DB_PASS}@ds227858.mlab.com:27858/ngnix`,
+      uri: process.env.DEVDB_URI || `mongodb://infzgbgd:${process.env.DB_PASS}@ds227858.mlab.com:27858/ngnix`,
       options: {
         debug: false
       }
@@ -62,7 +62,7 @@ const config = {
   },
   development: {
     mongo: {
-      uri: `mongodb://infzgbgd:${process.env.DB_PASS}@ds227858.mlab.com:27858/ngnix`,
+      uri: process.env.DEVDB_URI || `mongodb://infzgbgd:${process.env.DB_PASS}@ds227858.mlab.com:27858/ngnix`,
       options: {
         debug: true
       }
@@ -72,7 +72,7 @@ const config = {
     ip: process.env.IP || '0.0.0.0',
     port: process.env.PORT || 8080,
     mongo: {
-      uri: process.env.MONGODB_URI || `mongodb://infzgbgd:${process.env.DB_PASS}@ds227858.mlab.com:27858/ngnix`,
+      uri: process.env.MONGODB_URI || process.env.DEVDB_URI || `mongodb://infzgbgd:${process.env.DB_PASS}@ds227858.mlab.com:27858/ngnix`,
       options: {
         db: {
           safe: true
