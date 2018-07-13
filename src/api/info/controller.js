@@ -11,7 +11,7 @@ export const create = ({ user, bodymen: { body } }, res, next) =>
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   Info.count(query)
-    .then(count => Info.find(query, select, cursor)
+    .then(count => Info.find(query, select, { ...cursor, limit: cursor.limit || 100 })
       .populate('user')
       .then((infos) => ({
         count,
